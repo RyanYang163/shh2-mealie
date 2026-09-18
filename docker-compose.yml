@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   shh2-mealie:
-    image: ghcr.io/mealie-recipes/mealie:TAG-VERIFY
+    image: hkotel/mealie:v3.27.0
     container_name: shh2-mealie
     restart: unless-stopped
     ports:

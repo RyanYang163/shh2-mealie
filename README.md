@@ -24,8 +24,9 @@
 
 ## 提交前必办事项
 
-- ⚠️ 官方文档推荐使用 GHCR 镜像；H14 要求镜像源为 Docker Hub，提交前必须确认该镜像在 Docker Hub 上可用，否则会被驳回。
-- ⚠️ 镜像 TAG 未能核实（本机无法访问 Docker Hub），已置为 TAG-VERIFY，build.sh 会拒绝构建，请先填入经验证的版本号。
+- 镜像已核实：`hkotel/mealie:v3.27.0` 托管在 Docker Hub，提供 amd64 + arm64，最近更新 2026-09-17 —— **满足 H14**。
+- ⚠️ 注意：Mealie 官方已迁到 GHCR，Docker Hub 上没有官方命名空间。本项使用的是活跃维护的社区镜像 `hkotel/mealie`（早期官方命名空间）。若审核方不接受社区镜像，更稳妥的做法是把官方 GHCR 镜像同步到自己的 Docker Hub 账号下再引用。
+- ⚠️ 上游已进入 v3.x（原调研资料里的 v2 信息已过时），本项锁定 v3.27.0，升级时改 `docker-compose.yml` 的 tag 即可。
 - 官方镜像自带 HEALTHCHECK，compose 中未重复定义。
 - 社区反馈冷启动较慢，首屏 ≤5 秒需真机实测。
 - [ ] 真机安装、启动、停止、卸载残留四项实测
