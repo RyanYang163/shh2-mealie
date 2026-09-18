@@ -1,0 +1,97 @@
+[en-us]
+name = "Mealie"
+auth = "shh"
+descript = "Self-hosted recipe manager with meal planning and shopping lists."
+release_note = "1. Initial release."
+important = "Requires DockerEngine from the TOS App Center."
+
+[zh-cn]
+name = "Mealie"
+auth = "shh"
+descript = "家庭食谱管理：收藏菜谱、生成购物清单、按周排菜。"
+release_note = "1. 首次发布。"
+important = "需要先在 TOS 应用中心安装并启用 DockerEngine。"
+
+[zh-hk]
+name = "Mealie"
+auth = "shh"
+descript = "家庭食谱管理：收藏菜谱、生成购物清单、按周排菜。"
+release_note = "1. 首次發佈。"
+important = "需要先在 TOS 應用中心安裝並啟用 DockerEngine。"
+
+[fr-fr]
+name = "Mealie"
+auth = "shh"
+descript = "Self-hosted recipe manager with meal planning and shopping lists."
+release_note = "1. Initial release."
+important = "Requires DockerEngine from the TOS App Center."
+
+[de-de]
+name = "Mealie"
+auth = "shh"
+descript = "Self-hosted recipe manager with meal planning and shopping lists."
+release_note = "1. Initial release."
+important = "Requires DockerEngine from the TOS App Center."
+
+[it-it]
+name = "Mealie"
+auth = "shh"
+descript = "Self-hosted recipe manager with meal planning and shopping lists."
+release_note = "1. Initial release."
+important = "Requires DockerEngine from the TOS App Center."
+
+[es-es]
+name = "Mealie"
+auth = "shh"
+descript = "Self-hosted recipe manager with meal planning and shopping lists."
+release_note = "1. Initial release."
+important = "Requires DockerEngine from the TOS App Center."
+
+[hu-hu]
+name = "Mealie"
+auth = "shh"
+descript = "Self-hosted recipe manager with meal planning and shopping lists."
+release_note = "1. Initial release."
+important = "Requires DockerEngine from the TOS App Center."
+
+[ja-jp]
+name = "Mealie"
+auth = "shh"
+descript = "Self-hosted recipe manager with meal planning and shopping lists."
+release_note = "1. Initial release."
+important = "Requires DockerEngine from the TOS App Center."
+
+[ko-kr]
+name = "Mealie"
+auth = "shh"
+descript = "Self-hosted recipe manager with meal planning and shopping lists."
+release_note = "1. Initial release."
+important = "Requires DockerEngine from the TOS App Center."
+
+[pl-pl]
+name = "Mealie"
+auth = "shh"
+descript = "Self-hosted recipe manager with meal planning and shopping lists."
+release_note = "1. Initial release."
+important = "Requires DockerEngine from the TOS App Center."
+
+[ru-ru]
+name = "Mealie"
+auth = "shh"
+descript = "Self-hosted recipe manager with meal planning and shopping lists."
+release_note = "1. Initial release."
+important = "Requires DockerEngine from the TOS App Center."
+
+[tr-tr]
+name = "Mealie"
+auth = "shh"
+descript = "Self-hosted recipe manager with meal planning and shopping lists."
+release_note = "1. Initial release."
+important = "Requires DockerEngine from the TOS App Center."
+
+[pt-pt]
+name = "Mealie"
+auth = "shh"
+descript = "Self-hosted recipe manager with meal planning and shopping lists."
+release_note = "1. Initial release."
+important = "Requires DockerEngine from the TOS App Center."

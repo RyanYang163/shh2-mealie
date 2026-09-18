@@ -1,0 +1,26 @@
+version: "3.8"
+
+services:
+  shh2-mealie:
+    image: ghcr.io/mealie-recipes/mealie:TAG-VERIFY
+    container_name: shh2-mealie
+    restart: unless-stopped
+    ports:
+      - "18802:9000"
+    user: "1000:1000"
+    volumes:
+      - /Volume*/DockerAppData/shh2-mealie/data:/app/data
+    environment:
+      - TZ=Asia/Shanghai
+    security_opt:
+      - no-new-privileges:true
+    deploy:
+      resources:
+        limits:
+          cpus: "1000m"
+          memory: 1G
+
+x-app-meta:
+  web:
+    port: 18802
+    protocol: http
