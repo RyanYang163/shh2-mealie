@@ -1,0 +1,47 @@
+name: Scan Candidate Images
+
+# 一次性/可重复的镜像体检：扫描所有候选镜像，输出可修复的 HIGH/CRITICAL 数量。
+# 用于在选镜像前摸清底数——不产生任何 Release，不改动任何东西。
+on:
+  workflow_dispatch:
+    inputs:
+      images:
+        description: "空格分隔的镜像列表（留空则用默认候选清单）"
+        required: false
+        default: ""
+
+permissions:
+  contents: read
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 安装 Trivy
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh \
+            | sudo sh -s -- -b /usr/local/bin
+          trivy --version
+
+      - name: 扫描
+        run: |
+          set -uo pipefail
+          IMAGES="${{ github.event.inputs.images }}"
+          if [ -z "$IMAGES" ]; then
+            IMAGES="hkotel/mealie:v3.27.0 louislam/uptime-kuma:2 ckulka/baikal:nginx advplyr/audiobookshelf:2.33.0 bellamy/wallos:5.7.1 linuxserver/bookstack:26.05.4 qmcgaw/ddns-updater:latest"
+          fi
+          printf '%-46s %8s %8s\n' "IMAGE" "可修复" "总数"
+          printf '%s\n' "----------------------------------------------------------------------"
+          for IMG in $IMAGES; do
+            trivy image --severity HIGH,CRITICAL --ignore-unfixed --quiet \
+              --format json -o /tmp/f.json "$IMG" >/dev/null 2>&1 || true
+            trivy image --severity HIGH,CRITICAL --quiet \
+              --format json -o /tmp/a.json "$IMG" >/dev/null 2>&1 || true
+            F=$(python3 -c "import json;d=json.load(open('/tmp/f.json'));print(sum(len(r.get('Vulnerabilities') or []) for r in d.get('Results',[])))" 2>/dev/null || echo "ERR")
+            A=$(python3 -c "import json;d=json.load(open('/tmp/a.json'));print(sum(len(r.get('Vulnerabilities') or []) for r in d.get('Results',[])))" 2>/dev/null || echo "ERR")
+            printf '%-46s %8s %8s\n' "$IMG" "$F" "$A"
+            echo "$IMG  可修复=$F  总数=$A" >> /tmp/summary.txt
+          done
+          echo
+          echo "=== 汇总（可修复=0 才可用）==="
+          cat /tmp/summary.txt
