@@ -1,47 +1,76 @@
 # Mealie
 
-| 项 | 值 |
+> TOS 7 application package for **Mealie** — platform integration only.
+> The application itself is provided by the upstream project, unmodified.
+
+## Overview
+
+Self-hosted recipe manager with meal planning, shopping lists and household sharing.
+
+上游项目 / Upstream: <https://github.com/mealie-recipes/mealie>
+上游许可证 / License: **AGPL-3.0**
+
+## Features
+
+- Recipe collection with automatic parsing and import
+- Weekly meal planner and shopping lists
+- Household sharing with multiple users
+- REST API and mobile-friendly web UI
+
+## Installation
+
+1. Requirements: TOS 7.0+ and Docker Engine (install from the TOS App Center)
+2. Install from the TOS App Center
+3. Open the app and complete initial configuration
+
+## Usage
+
+1. Access URL: `http://${ip}:18802`
+2. Default credentials: see upstream documentation
+3. Key settings: see upstream documentation
+
+## Permissions
+
+| Permission | Rationale |
 |---|---|
-| 应用 ID | `shh2-mealie` |
-| 形态 | Docker 应用（Compose） · WebUI 外开（浏览器新标签） |
-| 版本 | 1.0.0 |
-| 上游项目 | https://github.com/mealie-recipes/mealie |
-| 上游许可证 | AGPL-3.0 |
-| 宿主端口 | 18802 |
+| Network: port 18802 | Web UI access |
+| File system: `/Volume*/DockerAppData/shh2-mealie/` | Application data persistence |
+| User: shh2mealie | Isolated non-root service execution |
 
-## 简介
+## Configuration
 
-家庭食谱管理：收藏菜谱、生成购物清单、按周排菜。
+See `config.ini` for platform metadata; see `docker-compose.yml` for runtime configuration.
 
-## 打包
+## Ports
 
-```bash
-./build.sh                # 默认 x86_64
-./build.sh aarch64        # ARM（Deb 应用）
-```
+| Port | Protocol | Purpose |
+|---|---|---|
+| 18802 | TCP | Web UI (Mealie) |
 
-产物在 `build/output/`，同级生成 `<包名>.sha256`。
+## Support
 
-## 提交前必办事项
+- Documentation: https://github.com/mealie-recipes/mealie
+- Issue tracker: https://github.com/mealie-recipes/mealie/issues
+- Community: https://github.com/mealie-recipes/mealie
 
-- 镜像已核实：`hkotel/mealie:v3.27.0` 托管在 Docker Hub，提供 amd64 + arm64，最近更新 2026-09-17 —— **满足 H14**。
-- ⚠️ 注意：Mealie 官方已迁到 GHCR，Docker Hub 上没有官方命名空间。本项使用的是活跃维护的社区镜像 `hkotel/mealie`（早期官方命名空间）。若审核方不接受社区镜像，更稳妥的做法是把官方 GHCR 镜像同步到自己的 Docker Hub 账号下再引用。
-- ⚠️ 上游已进入 v3.x（原调研资料里的 v2 信息已过时），本项锁定 v3.27.0，升级时改 `docker-compose.yml` 的 tag 即可。
-- 官方镜像自带 HEALTHCHECK，compose 中未重复定义。
-- 社区反馈冷启动较慢，首屏 ≤5 秒需真机实测。
-- [ ] 真机安装、启动、停止、卸载残留四项实测
-- [ ] 首屏加载 ≤ 5 秒（指引 H10）
-- [ ] x86_64 与 aarch64 分别构建并测试（指引 H7）
-- [ ] 提交前跑一遍指引 13.9 上架前自查清单
+## Security & Compliance
 
-## 隐私政策
+- **License**: AGPL-3.0 — full text in [`LICENSE`](./LICENSE)
+- **Attribution**: see [`NOTICE`](./NOTICE)
+- **Privacy Policy**: see [`PRIVACY.md`](./PRIVACY.md)
+- **Vulnerability scan**: `trivy-report.txt` attached to each Release (HIGH/CRITICAL must be 0)
+- Runs as a non-root dedicated user; no privileged mode, no host network
 
-见 [PRIVACY.md](./PRIVACY.md)（对应审核项 C3–C8）。
+## Changelog
 
-## 许可证与出处
+### v1.0.1 (2026-09-20)
+- Compliance update: added LICENSE / NOTICE / PRIVACY materials,
+  declared upstream license inside the package, added container healthcheck
 
-本仓库**仅包含 TOS 平台集成所需的配置文件与打包脚本**，应用本体的源码与二进制来自上游项目：https://github.com/mealie-recipes/mealie
+### v1.0.0
+- Initial release
 
-上游许可证：**%s**。本封装保留上游许可证声明，未修改上游代码（Deb 形态下按上游许可证要求随包提供 LICENSE）。
+## License
 
-应用名称与图标为上游项目的标识；本仓库图标为自行绘制的简易图形，不含上游商标元素（对应审核项 H19）。
+**AGPL-3.0** — this packaging repository is distributed under the same license as the
+upstream project. Full text: [`LICENSE`](./LICENSE).

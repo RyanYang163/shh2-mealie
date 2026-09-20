@@ -1,0 +1,10 @@
+{
+  "name": "Mealie",
+  "license": "AGPL-3.0",
+  "port": 18802,
+  "license_url": "https://raw.githubusercontent.com/mealie-recipes/mealie/mealie-next/LICENSE",
+  "healthcheck": "curl -fsS http://localhost:9000/ >/dev/null || exit 1",
+  "en": "Self-hosted recipe manager with meal planning, shopping lists and household sharing.",
+  "features": "- Recipe collection with automatic parsing and import\n- Weekly meal planner and shopping lists\n- Household sharing with multiple users\n- REST API and mobile-friendly web UI",
+  "date": "2026-09-20"
+}

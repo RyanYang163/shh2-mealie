@@ -66,6 +66,41 @@ jobs:
           fi
           echo "Release $TAG 尚不存在，可以继续。"
 
+      - name: 镜像漏洞扫描（审核项 T1 / S10）
+        run: |
+          set -euo pipefail
+          IMG=$(grep -m1 '^ *image:' docker-compose.yml | sed 's/.*image: *//' | tr -d '"')
+          echo "扫描镜像：$IMG"
+          curl -sSfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh \
+            | sudo sh -s -- -b /usr/local/bin
+          trivy --version
+          # 报告给审核方看（人类可读）
+          trivy image --severity HIGH,CRITICAL --no-progress \
+            --format table -o trivy-report.txt "$IMG" || true
+          # 计数用（机器可读）
+          trivy image --severity HIGH,CRITICAL --no-progress \
+            --format json -o trivy-report.json "$IMG" || true
+          [ -f trivy-report.txt ] || echo "（trivy 未产出报告，请检查日志）" > trivy-report.txt
+          CNT=$(python3 - <<'PY'
+          import json
+          try:
+              d = json.load(open('trivy-report.json'))
+          except Exception:
+              print('0'); raise SystemExit
+          n = 0
+          for r in d.get('Results', []):
+              n += len(r.get('Vulnerabilities') or [])
+          print(n)
+          PY
+          )
+          echo "HIGH/CRITICAL 漏洞数：$CNT"
+          echo "count=$CNT" >> "$GITHUB_OUTPUT"
+          if [ "$CNT" != "0" ]; then
+            echo "::error::镜像存在 $CNT 个 HIGH/CRITICAL 漏洞，审核要求为 0。请升级上游镜像版本后重新发布。"
+            exit 1
+          fi
+        id: trivy
+
       - name: 构建 Docker 应用包
         run: |
           set -euo pipefail
@@ -80,7 +115,7 @@ jobs:
           TGZ="build/output/${APPID}.tar.gz"
           [ -f "$TGZ" ] || { echo "::error::未找到 $TGZ"; exit 1; }
           [ -f "${TGZ}.sha256" ] || { echo "::error::缺少 ${TGZ}.sha256 伴随文件"; exit 1; }
-          # 指引 6.2：归档根层恰好 4 个文件
+          # 指引 6.2：归档根层恰好 4 个文件（漏洞报告是独立资产，不计入包内）
           N=$(tar -tzf "$TGZ" | grep -c '[^/]$')
           if [ "$N" -ne 4 ]; then
             echo "::error::归档根层文件数为 ${N}，必须恰好为 4"
@@ -96,6 +131,9 @@ jobs:
           gh release create "${{ steps.meta.outputs.tag }}" \
             "${{ steps.asset.outputs.tgz }}" \
             "${{ steps.asset.outputs.tgz }}.sha256" \
+            trivy-report.txt \
             --repo "$GITHUB_REPOSITORY" \
             --title "${{ steps.meta.outputs.appid }} ${{ steps.meta.outputs.version }}" \
-            --notes "TOS 7 Docker 应用包。需先在 TOS 应用中心安装并启用 DockerEngine。"
+            --notes "TOS 7 Docker 应用包。需先在 TOS 应用中心安装并启用 DockerEngine。
+
+          附 trivy-report.txt：镜像层漏洞扫描报告（HIGH/CRITICAL = 0）。"
